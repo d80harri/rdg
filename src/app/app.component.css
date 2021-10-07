@@ -1,0 +1,23 @@
+p {
+  font-family: Lato;
+}
+
+.extended .countdown{
+  color: red;
+}
+
+.extended .countdown::before {
+  content: "- ";
+}
+
+.countdown {
+  font-size: 60px;
+}
+
+.countdownPanel {
+  width:300px; float:left; padding-left: 100px
+}
+
+.previousPicks {
+  margin-top:30px;
+}

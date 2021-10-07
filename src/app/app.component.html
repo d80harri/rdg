@@ -1,0 +1,69 @@
+<div style="margin:auto; max-width:1000px">
+	<h1>Random Daily Generator</h1>
+	<p style="color:darkgray; padding-bottom: 50px">Generates a new sequence for each day. Log in to Jira to get the
+		full experience.</p>
+	<div *ngIf="(state===STATE.CLOSED)">
+		<img *ngFor="let member of team" [src]="member['image']" style="height:25px;padding-bottom: 50px"        [title]="member['name']"/>
+		<p>Currently there is no daily standup meeting in progress. Come back in
+			<b>{{tomorrowStandup.secondsToStart *1000 | date: 'HH:mm:ss'}}</b>.</p>
+		<p style="color:darkgray;font-size:12px">Except, of course, this is on a weekend or a holiday or you are on
+			vacation or sick, ..., than you are free to stay in bed.</p>
+
+		<p>In the meantime you could take a look at your <a href="https://bitbucket.lab.dynatrace.org/dashboard">pull
+				requests</a>.</p>
+	</div>
+
+	<div *ngIf="(state===STATE.OPEN || state===STATE.EXTENDED || state===STATE.PREPARED) ">
+		<div style="float:left">
+
+			<p> The sequence for {{ now | date :'mediumDate'}} is:</p>
+			<div #sequenceContainer>
+				<div *ngFor="let member of randomizedList" style="width:500px">
+					<span>
+            <img [src]="member['image']" style="width:35px"/>
+          </span>
+					<span style="font-size:30px">
+            {{member['name']}}
+          </span>
+					<hr>
+				</div>
+			</div>
+			<div>
+				<span>
+          <img src="https://cdn0.iconfinder.com/data/icons/octicons/1024/git-pull-request-512.png" style="width:35px"/>
+        </span>
+				<span style="font-size:30px">
+          <a href="https://bitbucket.lab.dynatrace.org/dashboard"> Pull Requests</a>
+        </span>
+			</div>
+		</div>
+		<div class="countdownPanel">
+			<h2>Countdown</h2>
+			<div [ngClass]="{extended: state==STATE['EXTENDED']}">
+				<span class="countdown">
+          {{ MATH.abs(todaysStandup.secondsToEnd)*1000 | date:'mm:ss'}}
+        </span>
+				<span>seconds</span>
+			</div>
+
+
+			<button (click)="viewHistory = !viewHistory">ViewHistory</button>
+			<div *ngIf="viewHistory" class="previousPicks">
+				<h1>History</h1>
+				<div *ngFor="let historyItem of randomizedListHistory" style="width:500px">
+					<span style="display: inline-block; width:200px">{{historyItem.date | date: 'EE MMMM, dd'}}</span>
+					<span *ngFor="let member of historyItem.randomizedList" >
+            <img [src]="member['image']" style="width:25px"/>
+          </span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="percentageIndicator" [style.background-color]="'red'" [style.position]="'absolute'"
+		[style.width.px]="percentageIndicator.width" [style.height.px]="percentageIndicator.height"
+		[style.top]="percentageIndicator.topOffset + 'px'" [style.left]="percentageIndicator.leftOffset + 'px'"
+		[style.opacity]="0.2">
+	</div>
+
+</div>
